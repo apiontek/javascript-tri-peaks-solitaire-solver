@@ -6,10 +6,23 @@ const solvable_games = [
   "5D 9C 5S QS 8S 9D AS 5C 2S QD KC 9H 4H QC 2H 8D 4C 4D JC TS 6D 7H QH 3S 5H JH 6H 2D AC 7S 7C 3D KD 9S 3C TH 6C AH 8H TC 4S 8C AD 3H KS 6S JS 7D JD TD 2C KH",
 ];
 
+const partial_games = [
+  "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2D KH 8C 6S 6H 2C 8H JC 9C 4D AD TH 2S AS QH 5H AH 3H 2H 4S 6D 3C TS JD 9H KD AC JS 9S 4H 4C 5S 5D 5C"
+]
+
 it("should solve known games", () => {
   assert.equal(true, true);
   solvable_games.forEach(function (i) {
     const array = i.split(" ");
+    const result = solver.solve(array.slice(0, 28), array.slice(28, 52), 0, []);
+    assert.equal(result[0], true);
+  });
+});
+
+it("should solve partial games", () => {
+  assert.equal(true, true);
+  partial_games.forEach(function (i) {
+    const array = i.split(" ").map(x => x === "0" ? 0 : x);
     const result = solver.solve(array.slice(0, 28), array.slice(28, 52), 0, []);
     assert.equal(result[0], true);
   });

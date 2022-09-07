@@ -8,5 +8,5 @@ module.exports = {
     node: true,
     mocha: true,
   },
-  extends: ["eslint:recommended", "prettier"]
+  extends: ["eslint:recommended", "prettier"],
 };

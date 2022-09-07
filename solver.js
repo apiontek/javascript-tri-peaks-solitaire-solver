@@ -65,7 +65,7 @@ class Pyramid {
 class MoveString {
     static gameWon() {return "You have won.";}
     static gameLost() {return "There are no more valid moves.";}
-    static match(cardA, cardB) {return "Move " + cardA + " onto the stock.";}
+    static match(cardA) {return "Move " + cardA + " onto the stock.";}
     static flipStock() {return "Draw a new stock card.";}
 }
 
@@ -108,7 +108,7 @@ function solve(pyramidArray, stockArray, stockIndex = 0, moveArray = []) {
         stockIndex++;
 
         newMoveArray = JSON.parse(JSON.stringify(moveArray));
-        newMoveArray.push(MoveString.match(cardA.toString, topStock.toString));
+        newMoveArray.push(MoveString.match(cardA.toString));
 
         let newPyramidArray = JSON.parse(JSON.stringify(pyramidArray));
         newPyramidArray[freeCardsIndices[i]] = 0;

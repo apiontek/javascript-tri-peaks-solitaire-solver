@@ -126,8 +126,7 @@ function solve(pyramidArray, stockArray, stockIndex = 0, moveArray = []) {
     let cardA = new Card(pyramidArray[freeCardsIndices[i]]);
     if (!cardA.isSequential(topStock)) continue;
     let newStock = JSON.parse(JSON.stringify(stockArray));
-    newStock.splice(stockIndex + 1, 0, cardA.toString);
-    stockIndex++;
+    newStock.splice(++stockIndex, 0, cardA.toString);
 
     newMoveArray = JSON.parse(JSON.stringify(moveArray));
     newMoveArray.push(MoveString.match(cardA.toString));

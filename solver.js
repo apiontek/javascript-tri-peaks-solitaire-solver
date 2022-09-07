@@ -60,10 +60,6 @@ class Pyramid {
         }
         return freeIndices;
     }
-
-    static triangularNumber(n) {
-        return (n * (n + 1)) / 2;
-    }
 }
 
 class MoveString {

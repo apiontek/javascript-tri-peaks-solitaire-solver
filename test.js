@@ -7,8 +7,8 @@ const solvable_games = [
 ];
 
 const partial_games = [
-  "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2D KH 8C 6S 6H 2C 8H JC 9C 4D AD TH 2S AS QH 5H AH 3H 2H 4S 6D 3C TS JD 9H KD AC JS 9S 4H 4C 5S 5D 5C"
-]
+  "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2D KH 8C 6S 6H 2C 8H JC 9C 4D AD TH 2S AS QH 5H AH 3H 2H 4S 6D 3C TS JD 9H KD AC JS 9S 4H 4C 5S 5D 5C",
+];
 
 it("should solve known games", () => {
   assert.equal(true, true);
@@ -22,7 +22,7 @@ it("should solve known games", () => {
 it("should solve partial games", () => {
   assert.equal(true, true);
   partial_games.forEach(function (i) {
-    const array = i.split(" ").map(x => x === "0" ? 0 : x);
+    const array = i.split(" ").map((x) => (x === "0" ? 0 : x));
     const result = solver.solve(array.slice(0, 28), array.slice(28, 52), 0, []);
     assert.equal(result[0], true);
   });

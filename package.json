@@ -5,7 +5,8 @@
   "main": "solver.js",
   "scripts": {
     "test": "mocha",
-    "lint": "eslint --ext .js --ignore-path .gitignore --fix ."
+    "lint": "eslint --ext .js --ignore-path .gitignore --fix .",
+    "format": "prettier .  --write"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,8 @@
   "homepage": "https://github.com/IgniparousTempest/javascript-tri-peaks-solitaire-solver#readme",
   "devDependencies": {
     "eslint": "^8.23.0",
-    "mocha": "^10.0.0"
+    "eslint-config-prettier": "^8.5.0",
+    "mocha": "^10.0.0",
+    "prettier": "^2.7.1"
   }
 }

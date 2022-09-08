@@ -95,8 +95,8 @@ class MoveString {
 const GameStates = Object.freeze({ won: true, lost: false });
 
 function getBestMoveArray(bestMoveArray, newMoveArray) {
-  let bestMoveLength = bestMoveArray.filter(s => s.startsWith("Move")).length;
-  let newMoveLength = newMoveArray.filter(s => s.startsWith("Move")).length;
+  let bestMoveLength = bestMoveArray.filter((s) => s.startsWith("Move")).length;
+  let newMoveLength = newMoveArray.filter((s) => s.startsWith("Move")).length;
   return newMoveLength > bestMoveLength ? newMoveArray : bestMoveArray;
 }
 
@@ -108,7 +108,13 @@ function getBestMoveArray(bestMoveArray, newMoveArray) {
  * @param moveArray The list of moves that have been made to get a deck in this configuration.
  * @returns {*[]|([*, *, *]|[*, *, *]|[*, *, *])}
  */
-function solve(pyramidArray, stockArray, stockIndex = 0, moveArray = [], bestMoveArray = []) {
+function solve(
+  pyramidArray,
+  stockArray,
+  stockIndex = 0,
+  moveArray = [],
+  bestMoveArray = []
+) {
   let newMoveArray = JSON.parse(JSON.stringify(moveArray));
   let newBestMoveArray = JSON.parse(JSON.stringify(bestMoveArray));
   let pyramid = new Pyramid(pyramidArray);
@@ -147,18 +153,30 @@ function solve(pyramidArray, stockArray, stockIndex = 0, moveArray = [], bestMov
     let newPyramidArray = JSON.parse(JSON.stringify(pyramidArray));
     newPyramidArray[freeCardsIndices[i]] = 0;
 
-    let result = solve(newPyramidArray, newStock, stockIndex, newMoveArray, newBestMoveArray);
+    let result = solve(
+      newPyramidArray,
+      newStock,
+      stockIndex,
+      newMoveArray,
+      newBestMoveArray
+    );
     if (result[0] === GameStates.won) return result;
     // if we didn't win from this move tree, let's grab the best move array
     // if it's better than what we already have
     newBestMoveArray = getBestMoveArray(newBestMoveArray, result[2]);
     newBestMoveArray = JSON.parse(JSON.stringify(newBestMoveArray));
-    }
+  }
 
   // Flip over a new card
   newMoveArray = JSON.parse(JSON.stringify(moveArray));
   newMoveArray.push(MoveString.flipStock());
-  let result = solve(pyramidArray, stockArray, stockIndex + 1, newMoveArray, newBestMoveArray);
+  let result = solve(
+    pyramidArray,
+    stockArray,
+    stockIndex + 1,
+    newMoveArray,
+    newBestMoveArray
+  );
   if (result[0] === GameStates.won) return result;
   // if we didn't win from this move tree, let's grab the best move array
   // if it's better than what we already have

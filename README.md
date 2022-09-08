@@ -10,7 +10,7 @@ The most significant addition is that this solver will return one possible "best
 
 This can help with games where the goal is not clearing the board, but clearing a certain set of cards or hitting a threshold of points.
 
-*NOTE:* The "best path" returned is the first one found that clears the most cards. Hypothetically, a board could have multiple paths to clear the same number of cards cards, and the path the solver returns might not clear the cards you need to clear.
+*NOTE:* The "best path" returned is the first one found that clears the most cards. Hypothetically, a board could have multiple paths to clear the same number of cards. The path the solver returns might not clear the cards you need to clear. A possible future improvement could be returning, say, the top 5 best paths.
 
 *NOTE:* Unsolvable boards can take a long time to process, so be patient. The sample unsolvable board below takes my computer almost 6 minutes to conclude.
 

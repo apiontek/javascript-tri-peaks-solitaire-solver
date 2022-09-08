@@ -1,6 +1,6 @@
 {
   "name": "javascript-tri-peaks-solitaire-solver",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A brute force solver for tri peaks solitaire written in javascript",
   "main": "solver.js",
   "scripts": {
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IgniparousTempest/javascript-tri-peaks-solitaire-solver.git"
+    "url": "git+https://github.com/apiontek/javascript-tri-peaks-solitaire-solver.git"
   },
-  "author": "Courtney Pitcher",
+  "author": "Adam Piontek, Courtney Pitcher",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/IgniparousTempest/javascript-tri-peaks-solitaire-solver/issues"
+    "url": "https://github.com/apiontek/javascript-tri-peaks-solitaire-solver/issues"
   },
-  "homepage": "https://github.com/IgniparousTempest/javascript-tri-peaks-solitaire-solver#readme",
+  "homepage": "https://github.com/apiontek/javascript-tri-peaks-solitaire-solver#readme",
   "devDependencies": {
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",

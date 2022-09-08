@@ -170,7 +170,7 @@ function solve(
   let result = solve(
     pyramidArray,
     stockArray,
-    stockIndex + 1,
+    ++stockIndex,
     newMoveArray,
     newBestMoveArray
   );

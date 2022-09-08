@@ -35,10 +35,7 @@ class Pyramid {
   }
 
   get isCleared() {
-    for (let i = 0; i < this.array.length; i++) {
-      if (this.array[i] !== 0) return false;
-    }
-    return true;
+    return this.array.every((c) => c === 0);
   }
 
   get freeCardIndices() {

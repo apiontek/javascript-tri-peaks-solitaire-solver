@@ -1,7 +1,14 @@
 {
   "name": "javascript-tri-peaks-solitaire-solver",
   "version": "1.0.1",
-  "description": "A brute force solver for tri peaks solitaire written in javascript",
+  "description": "A brute force solver for tri peaks solitaire written in javascript. Forked from work by Courtney Pitcher at https://github.com/IgniparousTempest/javascript-tri-peaks-solitaire-solver",
+  "keywords": [
+    "tripeaks",
+    "solitaire",
+    "game",
+    "solver",
+    "cards"
+  ],
   "main": "solver.js",
   "scripts": {
     "test": "mocha",
@@ -12,7 +19,11 @@
     "type": "git",
     "url": "git+https://github.com/apiontek/javascript-tri-peaks-solitaire-solver.git"
   },
-  "author": "Adam Piontek, Courtney Pitcher",
+  "author": {
+    "name": "Adam Piontek",
+    "email": "adam@73k.us",
+    "url": "https://73k.us/"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/apiontek/javascript-tri-peaks-solitaire-solver/issues"

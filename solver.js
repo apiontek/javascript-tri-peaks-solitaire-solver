@@ -94,28 +94,41 @@ class MoveString {
 
 const GameStates = Object.freeze({ won: true, lost: false });
 
+function getBestMoveArray(bestMoveArray, newMoveArray) {
+  let bestMoveLength = bestMoveArray.filter(s => s.startsWith("Move")).length;
+  let newMoveLength = newMoveArray.filter(s => s.startsWith("Move")).length;
+  return newMoveLength > bestMoveLength ? newMoveArray : bestMoveArray;
+}
+
 /**
  * Solves a Tri Peaks solitaire game.
  * @param pyramidArray The cards in the pyramids, starting in the top-left peak. The cards are in left-to-right, then top-to-bottom order.
  * @param stockArray The cards in the stock.
  * @param stockIndex The index of the top stock card.
  * @param moveArray The list of moves that have been made to get a deck in this configuration.
- * @returns {*[]|([*, *]|[*, *]|[*, *])}
+ * @returns {*[]|([*, *, *]|[*, *, *]|[*, *, *])}
  */
-function solve(pyramidArray, stockArray, stockIndex = 0, moveArray = []) {
+function solve(pyramidArray, stockArray, stockIndex = 0, moveArray = [], bestMoveArray = []) {
   let newMoveArray = JSON.parse(JSON.stringify(moveArray));
+  let newBestMoveArray = JSON.parse(JSON.stringify(bestMoveArray));
   let pyramid = new Pyramid(pyramidArray);
+
+  // We're in a new game state.
+  // Are the moves that brought us here better than the previous best moves we received?
+  // If yes, replace the known best move array
+  newBestMoveArray = getBestMoveArray(newBestMoveArray, newMoveArray);
+  newBestMoveArray = JSON.parse(JSON.stringify(newBestMoveArray));
 
   // We cleared the pyramid
   if (pyramid.isCleared) {
     newMoveArray.push(MoveString.gameWon());
-    return [GameStates.won, newMoveArray];
+    return [GameStates.won, newMoveArray, []];
   }
 
   // We have run out of stock cards
   if (stockIndex >= stockArray.length) {
     newMoveArray.push(MoveString.gameLost());
-    return [GameStates.lost, newMoveArray];
+    return [GameStates.lost, newMoveArray, newBestMoveArray];
   }
 
   const topStock = new Card(stockArray[stockIndex]);
@@ -134,18 +147,26 @@ function solve(pyramidArray, stockArray, stockIndex = 0, moveArray = []) {
     let newPyramidArray = JSON.parse(JSON.stringify(pyramidArray));
     newPyramidArray[freeCardsIndices[i]] = 0;
 
-    let result = solve(newPyramidArray, newStock, stockIndex, newMoveArray);
+    let result = solve(newPyramidArray, newStock, stockIndex, newMoveArray, newBestMoveArray);
     if (result[0] === GameStates.won) return result;
-  }
+    // if we didn't win from this move tree, let's grab the best move array
+    // if it's better than what we already have
+    newBestMoveArray = getBestMoveArray(newBestMoveArray, result[2]);
+    newBestMoveArray = JSON.parse(JSON.stringify(newBestMoveArray));
+    }
 
   // Flip over a new card
   newMoveArray = JSON.parse(JSON.stringify(moveArray));
   newMoveArray.push(MoveString.flipStock());
-  let result = solve(pyramidArray, stockArray, stockIndex + 1, newMoveArray);
+  let result = solve(pyramidArray, stockArray, stockIndex + 1, newMoveArray, newBestMoveArray);
   if (result[0] === GameStates.won) return result;
+  // if we didn't win from this move tree, let's grab the best move array
+  // if it's better than what we already have
+  newBestMoveArray = getBestMoveArray(newBestMoveArray, result[2]);
+  newBestMoveArray = JSON.parse(JSON.stringify(newBestMoveArray));
 
   // This node was useless
-  return [GameStates.lost, moveArray];
+  return [GameStates.lost, moveArray, newBestMoveArray];
 }
 
 exports.solve = solve;

@@ -19,8 +19,8 @@ class Card {
    */
   isSequential(card) {
     return (
-      (this.integerValue + 1) % 13 === card.integerValue ||
-      (this.integerValue - 1) % 13 === card.integerValue
+      (this.integerValue + 13 + 1) % 13 === card.integerValue ||
+      (this.integerValue + 13 - 1) % 13 === card.integerValue
     );
   }
 

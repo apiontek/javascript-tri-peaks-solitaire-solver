@@ -1,12 +1,13 @@
 module.exports = {
   parserOptions: {
-    ecmaVersion: "latest",
+    sourceType: "module",
   },
   env: {
-    browser: false,
-    es6: true,
-    node: true,
+    browser: true,
+    es2022: true,
     mocha: true,
+    node: true,
   },
+  plugins: ["html"],
   extends: ["eslint:recommended", "prettier"],
 };

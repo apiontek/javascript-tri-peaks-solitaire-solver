@@ -11,8 +11,11 @@
   ],
   "main": "solver.js",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "mocha",
-    "lint": "eslint --ext .js --ignore-path .gitignore --fix .",
+    "lint": "eslint --ext .js,.html --ignore-path .gitignore --fix .",
     "format": "prettier .  --write"
   },
   "repository": {
@@ -30,9 +33,14 @@
   },
   "homepage": "https://github.com/apiontek/javascript-tri-peaks-solitaire-solver#readme",
   "devDependencies": {
+    "alpinejs": "^3.10.3",
+    "bootstrap": "^5.2.1",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-html": "^7.1.0",
     "mocha": "^10.0.0",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "sass": "^1.54.9",
+    "vite": "^3.1.0"
   }
 }

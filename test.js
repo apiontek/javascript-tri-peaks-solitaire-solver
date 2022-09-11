@@ -1,6 +1,48 @@
 const assert = require("assert");
 const solver = require("./solver");
+const Card = solver.Card;
 
+/*
+ * Tests for classes
+ */
+const sequentialCardPairs = [
+  ["AH", "2D"],
+  ["KC", "AS"],
+  ["JD", "TC"],
+  ["6S", "7H"],
+  ["AC", "KH"],
+  ["4S", "3S"],
+];
+const nonSequentialCardPairs = [
+  ["JD", "9D"],
+  ["QC", "AC"],
+  ["8S", "3S"],
+  ["KS", "2C"],
+  ["4S", "6S"],
+  ["5H", "7H"],
+];
+
+it("Card isSequential should return true for sequential cards", () => {
+  sequentialCardPairs.forEach((cp) => {
+    const cardA = new Card(cp[0]);
+    const cardB = new Card(cp[1]);
+    assert.equal(cardA.isSequential(cardB), true);
+    assert.equal(cardB.isSequential(cardA), true);
+  });
+});
+
+it("Card isSequential should return false for non-sequential cards", () => {
+  nonSequentialCardPairs.forEach((cp) => {
+    const cardA = new Card(cp[0]);
+    const cardB = new Card(cp[1]);
+    assert.equal(cardA.isSequential(cardB), false);
+    assert.equal(cardB.isSequential(cardA), false);
+  });
+});
+
+/*
+ * Tests for solve algorithm
+ */
 const solvable_games = [
   "8S TS 4D 7S 5D 7C 2D JH AC 3S 2H 3H 9H KC QC TD 8D 9C 7H 9D JS QS 4H 5C 5S 4C 2C QD 8C KD 3D KS JD 2S 7D KH AH 5H 9S 4S QH 6S 6D 3C JC TC 8H 6C TH AS AD 6H",
   "5D 9C 5S QS 8S 9D AS 5C 2S QD KC 9H 4H QC 2H 8D 4C 4D JC TS 6D 7H QH 3S 5H JH 6H 2D AC 7S 7C 3D KD 9S 3C TH 6C AH 8H TC 4S 8C AD 3H KS 6S JS 7D JD TD 2C KH",
@@ -13,16 +55,16 @@ const partial_games = [
   "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2D KH 8C 6S 6H 2C 8H JC 9C 4D AD TH 2S AS QH 5H AH 3H 2H 4S 6D 3C TS JD 9H KD AC JS 9S 4H 4C 5S 5D 5C",
 ];
 
-it("should solve known games", () => {
-  solvable_games.forEach(function (i) {
+it("solve should solve known games", () => {
+  solvable_games.forEach((i) => {
     const array = i.split(" ");
     const result = solver.solve(array.slice(0, 28), array.slice(28, 52), 0, []);
     assert.equal(result[0], true);
   });
 }).timeout(200000);
 
-it("should solve partial games", () => {
-  partial_games.forEach(function (i) {
+it("solve should solve partial games", () => {
+  partial_games.forEach((i) => {
     const array = i.split(" ").map((x) => (x === "0" ? 0 : x));
     const result = solver.solve(array.slice(0, 28), array.slice(28, 52), 0, []);
     assert.equal(result[0], true);

@@ -92,13 +92,14 @@
               ></textarea>
             </div>
 
-            <div id="playingCardsDisplay" class="playingCards">
-              <span class="card rank-2 diams">
-                <span class="rank">2</span>
-                <span class="suit">&diams;</span>
-              </span>
+            <div id="playingCardsStock" class="playingCards">
+              <ul class="hand">
+                <template x-for="(card, index) in $store.global.cardsToSolve.slice(52-24)">
+                  <li x-html="cardHtml(card, index)"></li>
+                </template>
+              </ul>
             </div>
-  
+
           </div>
 
         </div>

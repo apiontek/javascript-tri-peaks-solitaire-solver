@@ -4,11 +4,50 @@ import Alpine from "alpinejs";
 // import 'bootstrap/dist/js/bootstrap'
 
 Alpine.store('global', {
-  cardsToSolve: []
+  cardsToSolve: Array(52).fill(0)
 })
 
 Alpine.data("playingCardsPreview", () => ({
-  testing: true
+  rankText: {
+    'A': 'Ace',
+    '2': 'Two',
+    '3': 'Three',
+    '4': 'Four',
+    '5': 'Five',
+    '6': 'Six',
+    '7': 'Seven',
+    '8': 'Eight',
+    '9': 'Nine',
+    'T': 'Ten',
+    'J': 'Jack',
+    'Q': 'Queen',
+    'K': 'King'
+  },
+  suitText: {
+    'C': 'Clubs',
+    'D': 'Diamonds',
+    'H': 'Hearts',
+    'S': 'Spades'
+  },
+  rankSlug(rank) {
+    return `rank-${rank === 'T' ? '10' : rank}`
+  },
+  suitSlug: {
+    'C': 'clubs',
+    'D': 'diams',
+    'H': 'hearts',
+    'S': 'spades'
+  },
+  cardHtml(card, index) {
+    if (card === '0' || card === 0) {
+      return `<abbr title="Unknown" class="card" style="z-index:${this.stockCard(index)};"></abbr>`
+    } else {
+      return `<abbr title="${this.rankText[card[0]]} of ${this.suitText[card[1]]}" class="card ${this.rankSlug(card[0])} ${this.suitSlug[card[1]]}" style="z-index:${this.stockCard(index)};"><abbr class="rank" aria-hidden="true">${card[0]}</abbr><abbr class="suit" aria-hidden="true">&${this.suitSlug[card[1]]};</abbr><abbr class="suit-b" aria-hidden="true">&${this.suitSlug[card[1]]};</abbr><abbr class="rank-b" aria-hidden="true">${card[0]}</abbr></abbr>`
+    }
+  },
+  stockCard(index) {
+    return 500 - (10 * index)
+  }
 }));
 
 Alpine.data("cardsInputForm", () => ({

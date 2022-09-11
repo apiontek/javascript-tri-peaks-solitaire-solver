@@ -1,12 +1,31 @@
 @import "../node_modules/bootstrap/scss/bootstrap";
 
+abbr[title] {
+  border-bottom: none !important;
+  cursor: inherit !important;
+  text-decoration: none !important;
+}
+
 .playingCards {
   .card {
-    box-shadow: .1em .1em .3em #999 !important;
+    box-shadow: .05em .05em .1em #888 !important;
+    border-color: #aaa !important;
+    border-radius: 0.2em !important;
     .suit {
       &::after {
-        line-height: .8 !important;
+        margin-top: -.9em !important;
+        font-size: 0.9em !important;
       }
+    }
+    .suit-b {
+      position: absolute;
+      right: 4px;
+      bottom: 18px;
+    }
+    .rank-b {
+      position: absolute;
+      right: 4px;
+      bottom: -1px;
     }
   }
 }

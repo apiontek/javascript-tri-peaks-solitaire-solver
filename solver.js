@@ -184,4 +184,4 @@ function solve(
   return [GameStates.lost, moveArray, newBestMoveArray];
 }
 
-exports.solve = solve;
+module.exports = { solve };

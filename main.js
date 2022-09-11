@@ -1,6 +1,15 @@
 import "./style.scss";
+import "./style-cards.css";
 import Alpine from "alpinejs";
 // import 'bootstrap/dist/js/bootstrap'
+
+Alpine.store('global', {
+  cardsToSolve: []
+})
+
+Alpine.data("playingCardsPreview", () => ({
+  testing: true
+}));
 
 Alpine.data("cardsInputForm", () => ({
   // "constants" for validation etc
@@ -120,7 +129,7 @@ Alpine.data("cardsInputForm", () => ({
     }
 
     // set the game cards to try solving, based on current input
-    this.cardsToSolve = Array(this.deck.length - this.validCards.length)
+    this.$store.global.cardsToSolve = Array(this.deck.length - this.validCards.length)
       .fill(0)
       .concat(this.validCards)
       .map((c) => (c === "0" ? 0 : c));

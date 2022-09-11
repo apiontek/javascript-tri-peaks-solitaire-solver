@@ -1,1 +1,12 @@
 @import "../node_modules/bootstrap/scss/bootstrap";
+
+.playingCards {
+  .card {
+    box-shadow: .1em .1em .3em #999 !important;
+    .suit {
+      &::after {
+        line-height: .8 !important;
+      }
+    }
+  }
+}

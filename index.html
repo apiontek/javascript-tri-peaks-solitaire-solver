@@ -11,6 +11,7 @@
     <div class="container">
       <div class="row">
         <div class="col pt-3 pt-lg-5">
+
           <h1>Tripeaks Solver</h1>
 
           <p>Enter cards representing a Tripeaks game below. Enter each card as 2 characters each, representing the rank (A, 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K) and suit (C, D, H, S). For example, "TH" is the Ten of Hearts.</p>
@@ -25,6 +26,7 @@
             <li>7c03s0qsjc00JSasTSadtcqd9s4s2h9h8sjh6c3dks5s5c6h9C2Cac8C6d5DTH8dkckd9d4c5h8hqh6s</li>
           </ul>
 
+          <!-- User input of game cards -->
           <form
             id="cardsInputForm"
             x-data="cardsInputForm"
@@ -46,7 +48,7 @@
                 :class="{ 'is-valid': isFormValid && inputValue.length > 2, 'is-invalid': !isFormValid && inputValue.length > 2 }"
                 maxlength="206"
                 @keyup.debounce="validateCardsInput()"
-                :placeholder="useDelim ? 'e.g., 2S TC 4S QD KH 5S 9S ...' : 'e.g., 2STC4SQDKH5S9S...'"
+                placeholder="e.g., 2S TC 4S QD KH 5S 9S ..."
               />
 
               <template x-for="msg in validMessages">
@@ -65,6 +67,13 @@
               </template>
             </div>
 
+          </form>
+
+          <!-- Friendly display of game cards -->
+          <div
+            id="playingCardsPreview"
+            x-data="playingCardsPreview">
+
             <div class="mb-3">
               <label
                 id="cardsToSolveLabel"
@@ -76,13 +85,21 @@
                 id="cardsToSolve"
                 aria-describedby="cardsToSolveLabel"
                 class="form-control"
-                x-text="cardsToSolve.join(' ')"
+                x-text="$store.global.cardsToSolve.join(' ')"
                 rows="4"
                 disabled
                 readonly
               ></textarea>
             </div>
-          </form>
+
+            <div id="playingCardsDisplay" class="playingCards">
+              <span class="card rank-2 diams">
+                <span class="rank">2</span>
+                <span class="suit">&diams;</span>
+              </span>
+            </div>
+  
+          </div>
 
         </div>
       </div>

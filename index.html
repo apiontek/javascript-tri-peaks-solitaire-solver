@@ -13,7 +13,17 @@
         <div class="col pt-3 pt-lg-5">
           <h1>Tripeaks Solver</h1>
 
-          <p x-data="helloilove" x-text="message"></p>
+          <p>Enter cards representing a Tripeaks game below. Enter each card as 2 characters each, representing the rank (A, 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K) and suit (C, D, H, S). For example, "TH" is the Ten of Hearts.</p>
+
+          <p>Use a 0 (zero) to represent unknown cards. However, all cards from the last row and the stock must be known (i.e., you must enter valid cards for the last 34 cards)</p>
+
+          <p>Entry is case-insensitive, and you may use either any delimeter (space, comma, colon, etc.) or no delimeter. Valid examples:</p>
+
+          <ul>
+            <li>0 TS 0 7S 5D 7C 2D 0 0 3S 2H 3H 9H KC QC TD 8D 9C 7H 9D JS QS 4H 5C 5S 4C 2C QD 8C KD 3D KS JD 2S 7D KH AH 5H 9S 4S QH 6S 6D 3C JC TC 8H 6C TH AS AD 6H</li>
+            <li>jc,ts,6d,7h,qh,3s,5h,jh,6h,2d,ac,7s,7c,3d,kd,9s,3c,th,6c,ah,8h,tc,4s,8c,ad,3h,ks,6s,js,7d,jd,td,2c,kh</li>
+            <li>7c03s0qsjc00JSasTSadtcqd9s4s2h9h8sjh6c3dks5s5c6h9C2Cac8C6d5DTH8dkckd9d4c5h8hqh6s</li>
+          </ul>
 
           <form
             id="cardsInputForm"
@@ -34,9 +44,9 @@
                 x-model="inputValue"
                 class="form-control"
                 :class="{ 'is-valid': isFormValid && inputValue.length > 2, 'is-invalid': !isFormValid && inputValue.length > 2 }"
-                maxlength="155"
-                @keyup.debounce="validateCardsInput($event)"
-                placeholder="e.g., 2S TC 4S QD KH 5S 9S ..."
+                maxlength="206"
+                @keyup.debounce="validateCardsInput()"
+                :placeholder="useDelim ? 'e.g., 2S TC 4S QD KH 5S 9S ...' : 'e.g., 2STC4SQDKH5S9S...'"
               />
 
               <template x-for="msg in validMessages">
@@ -74,25 +84,6 @@
             </div>
           </form>
 
-          <!-- <div x-data="cardInput">
-
-            <div class="mb-3">
-
-              <label for="userCardEntryInput" class="form-label" id="userCardEntryInputHelp">Enter Game Cards</label>
-              <input @keyup.debounce="validateCardString($event)" class="form-control" :class="{ 'is-valid': inputIsValid, 'is-invalid': !inputIsValid }" id="userCardEntryInput" aria-describedby="userCardEntryInputHelp" maxlength="155" placeholder="e.g., 2S TC 4S QD KH 5S 9S ...">
-
-              <div class="valid-feedback" :class="{ 'd-block': validUserCards.filter(c => c !== '0').length > 0 }" x-text="validatedCardsStr(validUserCards.filter(c => c != '0'), 'valid')"></div>
-
-              <div class="valid-feedback text-muted" :class="{ 'd-block': validUserCards.filter(c => c === '0').length > 0 }" x-text="`${52 - validUserCards.filter(c => c !== '0').length} unknown card${validUserCards.filter(c => c === '0').length > 1 ? 's' : ''}`"></div>
-
-              <div class="invalid-feedback" :class="{ 'd-block': dupedUserCards.length > 0 }" x-text="validatedCardsStr(dupedUserCards, 'duplicate')"></div>
-
-              <div class="invalid-feedback" :class="{ 'd-block': invalidUserCards.length > 0 }" x-text="validatedCardsStr(invalidUserCards, 'invalid')"></div>
-
-              <div class="invalid-feedback" :class="{ 'd-block': invalidLength !== '' }" x-text="invalidLength"></div>
-            </div>
-
-          </div> -->
         </div>
       </div>
     </div>

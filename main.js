@@ -2,12 +2,9 @@ import "./style.scss";
 import Alpine from "alpinejs";
 // import 'bootstrap/dist/js/bootstrap'
 
-Alpine.data("helloilove", () => ({
-  message: "I ❤️ Alpine",
-}));
-
 Alpine.data("cardsInputForm", () => ({
   // "constants" for validation etc
+  nonAlphaNumRegEx: /[\W_]+/g,
   suits: [],
   ranks: [],
   deck: [],
@@ -46,17 +43,26 @@ Alpine.data("cardsInputForm", () => ({
   get isValidCardsLengthInRange() {
     return !this.isValidCardsLengthTooSmall && !this.isValidCardsLengthTooBig;
   },
-  validateCardsInput(event) {
+  validateCardsInput() {
     // reset arrays and parse the input
     this.validCards = [];
     this.invalidCards = [];
     this.dupedCards = [];
     this.validMessages = [];
     this.invalidMessages = [];
-    let userCards = event.target.value
-      .toUpperCase()
-      .split(" ")
-      .filter((c) => c);
+    // handle if input has alphanum chars - treat them as delimeters
+    // if no alphanum chars, split by 2 chars except for 0
+    let userCards = this.nonAlphaNumRegEx.test(this.inputValue)
+      ? this.inputValue
+        .toUpperCase()
+        .replace(this.nonAlphaNumRegEx,' ')
+        .split(' ')
+        .filter((c) => c)
+      : this.inputValue
+        .toUpperCase()
+        .split(/0|(..)/g)
+        .filter(c => c !== '')
+        .map(c => !c ? '0' : c);
 
     // check the input
     userCards.forEach((card) => {
@@ -111,9 +117,6 @@ Alpine.data("cardsInputForm", () => ({
       this.validMessages.push(
         `${this.validCards.length} valid card${s}: ${this.validCards.join(" ")}`
       );
-    }
-    if (event.target.value.includes("  ")) {
-      this.invalidMessages.push("Too many spaces between cards");
     }
 
     // set the game cards to try solving, based on current input

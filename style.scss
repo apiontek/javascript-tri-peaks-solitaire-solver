@@ -1,31 +1,66 @@
+@use "sass:math";
 @import "../node_modules/bootstrap/scss/bootstrap";
 
-abbr[title] {
-  border-bottom: none !important;
-  cursor: inherit !important;
-  text-decoration: none !important;
-}
+#gamePyramid {
+  display: grid;
+  grid-template-columns: repeat(60, 1fr);
+  place-items: start;
+  grid-gap: 4px;
+  background-color: #242;
+  background-image: linear-gradient(to bottom right, #242, #484);
+  border-radius: 5px;
 
-.playingCards {
-  .card {
-    box-shadow: .05em .05em .1em #888 !important;
-    border-color: #aaa !important;
-    border-radius: 0.2em !important;
-    .suit {
-      &::after {
-        margin-top: -.9em !important;
-        font-size: 0.9em !important;
+  .game-pyramid-card {
+    width: 100%;
+    &::before {
+      // content: "";
+      display: inline-block;
+      width: 1px;
+      height: 0;
+    }
+    // first/top row (index 0, row 1)
+    @for $i from 0 to 3 {
+      &.game-pyramid-card-0-#{$i} {
+        grid-row: 1;
+        grid-column: #{($i + 1) * 10 + $i * 8} / #{($i + 1) * 10 + $i * 8+6};
       }
     }
-    .suit-b {
-      position: absolute;
-      right: 4px;
-      bottom: 18px;
+    // second row (index 1, row 2)
+    @for $i from 0 to 6 {
+      &.game-pyramid-card-1-#{$i} {
+        grid-row: 2;
+        grid-column: #{(($i + 1) * 7)-
+          ($i % 2)+
+          (math.floor(math.div($i, 2)) * 4)} /
+          #{(($i + 2) * 7)-
+          ($i % 2)+
+          (math.floor(math.div($i, 2)) * 4)-1};
+        margin-top: -75%;
+      }
     }
-    .rank-b {
-      position: absolute;
-      right: 4px;
-      bottom: -1px;
+    // third row (index 2, row 3)
+    @for $i from 0 to 9 {
+      &.game-pyramid-card-2-#{$i} {
+        grid-row: 3;
+        grid-column: #{4+ (6 * $i)} / #{10+ (6 * $i)};
+        margin-top: -75%;
+      }
+    }
+    // last/bottom row (index 3, row 4)
+    @for $i from 0 to 10 {
+      &.game-pyramid-card-3-#{$i} {
+        grid-row: 4;
+        grid-column: #{1+ (6 * $i)} / #{7+ (6 * $i)};
+        margin-top: -75%;
+      }
+    }
+    // stock cards
+    @for $i from 0 to 24 {
+      &.game-pyramid-card-4-#{$i} {
+        grid-column: #{5+ (2 * $i)} / #{11+ (2 * $i)};
+        grid-row: 5;
+        margin-top: 25%;
+      }
     }
   }
 }

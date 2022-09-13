@@ -1,75 +1,83 @@
 import "./style.scss";
-import "./style-cards.css";
 import Alpine from "alpinejs";
-// import 'bootstrap/dist/js/bootstrap'
+import cardSvgs from "./cardSvgs";
 
-Alpine.store('global', {
-  cardsToSolve: Array(52).fill(0)
-})
+// Some helpful constants
+const suits = {
+  C: "Clubs",
+  D: "Diamonds",
+  H: "Hearts",
+  S: "Spades",
+};
+const ranks = {
+  A: "Ace",
+  2: "Two",
+  3: "Three",
+  4: "Four",
+  5: "Five",
+  6: "Six",
+  7: "Seven",
+  8: "Eight",
+  9: "Nine",
+  T: "Ten",
+  J: "Jack",
+  Q: "Queen",
+  K: "King",
+};
+const deck = Object.keys(suits).flatMap((suit) => {
+  return Object.keys(ranks).map((cval) => {
+    return cval + suit;
+  });
+});
 
+// Do some SVG processing
+const cardSvgTitle = (ckey) => {
+  return deck.includes(ckey)
+    ? `${ranks[ckey[0]]} of ${suits[ckey[1]]}`
+    : "Unknown Card";
+};
+Object.keys(cardSvgs).forEach((ckey) => {
+  var cardDoc = new DOMParser().parseFromString(
+    cardSvgs[ckey],
+    "image/svg+xml"
+  );
+  var svgRoot = cardDoc.documentElement;
+  svgRoot.removeAttribute("height");
+  svgRoot.removeAttribute("width");
+  svgRoot.removeAttribute("class");
+  var titleEl = cardDoc.createElementNS(
+    svgRoot.lookupNamespaceURI(null),
+    "title"
+  );
+  var titleText = document.createTextNode(cardSvgTitle(ckey));
+  titleEl.appendChild(titleText);
+  svgRoot.insertBefore(titleEl, svgRoot.firstElementChild);
+  cardSvgs[ckey] = new XMLSerializer().serializeToString(
+    cardDoc.documentElement
+  );
+});
+
+// Keep some constants in global store for components
+Alpine.store("global", {
+  deck,
+  cardsToSolve: Array(deck.length).fill(0),
+});
+
+// card preview component data
 Alpine.data("playingCardsPreview", () => ({
-  rankText: {
-    'A': 'Ace',
-    '2': 'Two',
-    '3': 'Three',
-    '4': 'Four',
-    '5': 'Five',
-    '6': 'Six',
-    '7': 'Seven',
-    '8': 'Eight',
-    '9': 'Nine',
-    'T': 'Ten',
-    'J': 'Jack',
-    'Q': 'Queen',
-    'K': 'King'
+  cardSvgs,
+  cardsBySlice(start, length) {
+    return this.$store.global.cardsToSolve.slice(start, length);
   },
-  suitText: {
-    'C': 'Clubs',
-    'D': 'Diamonds',
-    'H': 'Hearts',
-    'S': 'Spades'
+  cardSvg(card) {
+    return card === 0 ? this.cardSvgs["2B"] : this.cardSvgs[card];
   },
-  rankSlug(rank) {
-    return `rank-${rank === 'T' ? '10' : rank}`
-  },
-  suitSlug: {
-    'C': 'clubs',
-    'D': 'diams',
-    'H': 'hearts',
-    'S': 'spades'
-  },
-  cardHtml(card, index) {
-    if (card === '0' || card === 0) {
-      return `<abbr title="Unknown" class="card" style="z-index:${this.stockCard(index)};"></abbr>`
-    } else {
-      return `<abbr title="${this.rankText[card[0]]} of ${this.suitText[card[1]]}" class="card ${this.rankSlug(card[0])} ${this.suitSlug[card[1]]}" style="z-index:${this.stockCard(index)};"><abbr class="rank" aria-hidden="true">${card[0]}</abbr><abbr class="suit" aria-hidden="true">&${this.suitSlug[card[1]]};</abbr><abbr class="suit-b" aria-hidden="true">&${this.suitSlug[card[1]]};</abbr><abbr class="rank-b" aria-hidden="true">${card[0]}</abbr></abbr>`
-    }
-  },
-  stockCard(index) {
-    return 500 - (10 * index)
-  }
 }));
 
+// input component data
 Alpine.data("cardsInputForm", () => ({
   // "constants" for validation etc
   nonAlphaNumRegEx: /[\W_]+/g,
-  suits: [],
-  ranks: [],
-  deck: [],
-  minCards: 34,
-  stockCount: 24,
-  peaksCount: 28,
-  onInit() {
-    this.suits = "CDHS".split("");
-    this.ranks = "A23456789TJQK".split("");
-    this.deck = this.suits.flatMap((suit) => {
-      return this.ranks.map((cval) => {
-        return cval + suit;
-      });
-    });
-    console.log(this.deck.join(", "));
-    console.log(`deck size: ${this.deck.length}`);
-  },
 
   // input validation
   inputValue: "",
@@ -78,15 +86,14 @@ Alpine.data("cardsInputForm", () => ({
   invalidCards: [],
   validMessages: [],
   invalidMessages: [],
-  cardsToSolve: [],
   get isFormValid() {
     return this.isValidCardsLengthInRange && this.invalidMessages.length === 0;
   },
   get isValidCardsLengthTooSmall() {
-    return this.validCards.length < this.minCards;
+    return this.validCards.length < 34;
   },
   get isValidCardsLengthTooBig() {
-    return this.validCards.length > this.deck.length;
+    return this.validCards.length > this.$store.global.deck.length;
   },
   get isValidCardsLengthInRange() {
     return !this.isValidCardsLengthTooSmall && !this.isValidCardsLengthTooBig;
@@ -102,15 +109,15 @@ Alpine.data("cardsInputForm", () => ({
     // if no alphanum chars, split by 2 chars except for 0
     let userCards = this.nonAlphaNumRegEx.test(this.inputValue)
       ? this.inputValue
-        .toUpperCase()
-        .replace(this.nonAlphaNumRegEx,' ')
-        .split(' ')
-        .filter((c) => c)
+          .toUpperCase()
+          .replace(this.nonAlphaNumRegEx, " ")
+          .split(" ")
+          .filter((c) => c)
       : this.inputValue
-        .toUpperCase()
-        .split(/0|(..)/g)
-        .filter(c => c !== '')
-        .map(c => !c ? '0' : c);
+          .toUpperCase()
+          .split(/0|(..)/g)
+          .filter((c) => c !== "")
+          .map((c) => (!c ? "0" : c));
 
     // check the input
     userCards.forEach((card) => {
@@ -120,7 +127,7 @@ Alpine.data("cardsInputForm", () => ({
       } else if (this.validCards.includes(card)) {
         // this card was already seen in user's input, now it's a duplicate
         this.dupedCards.push(card);
-      } else if (this.deck.includes(card)) {
+      } else if (this.$store.global.deck.includes(card)) {
         // not a duplicate, and in the reference deck? Valid, add to valid cards
         this.validCards.push(card);
       } else {
@@ -131,10 +138,10 @@ Alpine.data("cardsInputForm", () => ({
 
     // set validation messages based on length
     if (this.isValidCardsLengthTooSmall) {
-      this.invalidMessages.push(`Must enter at least ${this.minCards} cards`);
+      this.invalidMessages.push(`Must enter at least 34 cards`);
     } else if (this.isValidCardsLengthTooBig) {
       this.invalidMessages.push(
-        `Must not enter more than ${this.deck.length} cards`
+        `Must not enter more than ${this.$store.global.deck.length} cards`
       );
     }
     if (this.validCards.slice(this.validCards.length - 34).includes("0")) {
@@ -168,7 +175,9 @@ Alpine.data("cardsInputForm", () => ({
     }
 
     // set the game cards to try solving, based on current input
-    this.$store.global.cardsToSolve = Array(this.deck.length - this.validCards.length)
+    this.$store.global.cardsToSolve = Array(
+      this.$store.global.deck.length - this.validCards.length
+    )
       .fill(0)
       .concat(this.validCards)
       .map((c) => (c === "0" ? 0 : c));

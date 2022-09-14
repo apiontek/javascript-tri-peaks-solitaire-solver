@@ -12,7 +12,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "NODE_ENV=production vite build && html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --case-sensitive -o ./dist/index.html ./dist/index.html",
     "preview": "vite preview",
     "test": "mocha",
     "lint": "eslint --ext .js,.html --ignore-path .gitignore --fix .",
@@ -38,6 +38,7 @@
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-html": "^7.1.0",
+    "html-minifier": "^4.0.0",
     "mocha": "^10.0.0",
     "prettier": "^2.7.1",
     "sass": "^1.54.9",

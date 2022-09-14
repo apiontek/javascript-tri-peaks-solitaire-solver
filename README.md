@@ -1,19 +1,15 @@
-# javascript-tri-peaks-solitaire-solver
+# Tripeaks Solitaire Solver 73k
 
-A brute force solver for Microsoft Tri-Peaks solitaire written in javascript.
+A brute force solver for Microsoft Tripeaks solitaire written in javascript.
 
-This is a fork of [Courtney Pitcher's project](https://github.com/IgniparousTempest/javascript-tri-peaks-solitaire-solver), with several changes.
+The `dist` folder contains an HTML+JS interface for entering cards and getting solutions. You can open it directly in a browser to try it out.
 
-## Changes
+The solver can provide a "best moves" list (the first set of moves found that removes the most cards from the board) for unsolvable games, and games-in-progress (when you don't already know all the cards).
 
-- fixed card matching, implemented card matching tests
-- solver now returns a "first best set of moves found" for unsolvable games (the first set of moves found that removes the most cards from the board)
+This began as a fork of [Courtney Pitcher's project](https://github.com/IgniparousTempest/javascript-tri-peaks-solitaire-solver), and I'm grateful for the solving algorithm & inspiration.
 
 ## Notes
 
 - Unsolvable games can take 6 or more minutes to solve, so be patient.
-- Per Courtney Pitcher, "This is probably quite a poor implementation." Please don't fault either of us, he was teaching himself javascript, and I'm probably even less qualified...
-
-## TODO
-
-- [ ] HTML ui/demo _in progress_
+- Per Courtney Pitcher, "This is probably quite a poor implementation." Please don't fault either of us, he was teaching himself javascript, and I'm just having fun.
+- The HTML+JS interface is built with [Vite](https://vitejs.dev/), [Alpine.js](https://alpinejs.dev/), [Bootstrap](https://getbootstrap.com/), and some [free customized SVG playing cards](https://www.me.uk/cards/). Linting & formatting is included.

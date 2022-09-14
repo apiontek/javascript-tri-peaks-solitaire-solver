@@ -3,6 +3,11 @@ import Alpine from "alpinejs";
 import cardSvgs from "./cardSvgs";
 import SolverWorker from "./solverWorker?worker";
 
+// navbar svg icons
+import svg73k from "../img/73k.svg?raw";
+import biTwitter from "../img/bi-twitter.svg?raw";
+import biGithub from "../img/bi-github.svg?raw";
+
 // Some helpful constants
 const suits = {
   C: "Clubs",
@@ -64,6 +69,13 @@ Alpine.store("global", {
   cardsToSolve: Array(deck.length).fill(0),
   solvingInProgress: false,
 });
+
+// navbar logic
+Alpine.data("navbar", () => ({
+  svg73k: svg73k.replaceAll('="16"', '="24"'),
+  biTwitter: biTwitter.replaceAll('="16"', '="24"'),
+  biGithub: biGithub.replaceAll('="16"', '="24"'),
+}));
 
 // card preview component logic
 Alpine.data("playingCardsPreview", () => ({
@@ -198,11 +210,16 @@ const encouragements = [
   "Strive for progress, not perfection.",
   "I wish only to be alive and to experience this living to the fullest.",
   "This too shall pass.",
+  "Life is available only in the present moment.",
   "Patience is the companion of wisdom.",
   "The mountains are calling and I must go.",
   "Give time time.",
   "If you find a path with no obstacles, it probably doesn't lead anywhere",
   "A smooth sea never made a good sailor.",
+  "To be upset over what you don’t have is to waste what you do have.",
+  "The ultimate freedom lies in being able to wait patiently for a good thing.",
+  "If it isn't good, let it die. If it doesn't die, make it good.",
+  "A watched pot never boils without applying heat.",
   "Stick with the winners.",
   "I immerse myself in the experience of living without having to evaluate or understand it.",
   "Why fit in when you were born to stand out?",
@@ -218,13 +235,18 @@ const encouragements = [
   "We must let go of the life we have planned so as to accept the one that is waiting for us.",
   "Somewhere, something incredible is waiting to be known.",
   "If you spend your whole life waiting for the storm, you'll never enjoy the sunshine.",
+  "My actions are my only true belongings.",
+  "The way to have enough time is to never be in a hurry.",
+  "The more you know, the less you think you know.",
+  "Patience is also a form of action.",
 ];
 
 // game solving component logic
 Alpine.data("gameSolving", () => ({
   encouragements,
+  encourageIndex: null,
   solverWorker: null,
-  headerText: "Solution will go here:",
+  headerText: "Solution",
   moveCount: 23,
   statusMessages: [],
   solutionMoves: [],
@@ -236,6 +258,7 @@ Alpine.data("gameSolving", () => ({
     this.statusMessages = [];
     this.nodesTried = 0;
     this.nodesTriedFloor = 0;
+    this.encourageIndex = null;
   },
   onInit() {
     this.solverWorker = new SolverWorker();
@@ -254,10 +277,21 @@ Alpine.data("gameSolving", () => ({
             )} possibilities tried. Still working…`;
           }
           if (this.nodesTriedFloor % 250000 === 0) {
-            let randInRange = Math.floor(
-              Math.random() * this.encouragements.length
+            if (this.encourageIndex === null) {
+              this.encourageIndex = Math.floor(
+                Math.random() * this.encouragements.length
+              );
+            }
+            this.statusMessages.splice(
+              2,
+              0,
+              this.encouragements[this.encourageIndex]
             );
-            this.statusMessages.push(this.encouragements[randInRange]);
+            let newEncourageIndex = this.encourageIndex + 1;
+            this.encourageIndex =
+              newEncourageIndex === this.encouragements.length
+                ? 0
+                : newEncourageIndex;
           }
         }
       } else if (e.data.msg === "solve-result") {

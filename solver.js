@@ -101,8 +101,10 @@ function getBestMoveArray(bestMoveArray, newMoveArray) {
  * Solves a Tri Peaks solitaire game.
  * @param pyramidArray The cards in the pyramids, starting in the top-left peak. The cards are in left-to-right, then top-to-bottom order.
  * @param stockArray The cards in the stock.
+ * @param worker Optional Web Worker for reporting progress.
  * @param stockIndex The index of the top stock card.
  * @param moveArray The list of moves that have been made to get a deck in this configuration.
+ * @param bestMoveArray The best list of moves that have been found so far.
  * @returns {Promise<{*[]|([*, *, *]|[*, *, *]|[*, *, *])}>}
  */
 async function solve(

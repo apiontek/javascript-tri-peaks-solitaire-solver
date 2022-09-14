@@ -149,6 +149,7 @@
                 @keyup.debounce="validateCardsInput()"
                 placeholder="e.g., 2S TC 4S QD KH 5S 9S ..."
                 :disabled="$store.global.solvingInProgress"
+                autofocus
               />
               <button
                 id="cardsInputButton"

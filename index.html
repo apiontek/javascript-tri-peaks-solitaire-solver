@@ -11,175 +11,207 @@
     <div class="container">
       <div class="row">
         <div class="col pt-3 pt-lg-5">
-          <h1>Tripeaks Solver</h1>
+          <h1 class="mb-3">Tripeaks Solver</h1>
 
-          <p>
-            Enter cards representing a Tripeaks game below. Enter each card as 2
-            characters representing the rank (A, 2, 3, 4, 5, 6, 7, 8, 9, T, J,
-            Q, K) and suit (C, D, H, S). For example, "TH" is the Ten of Hearts.
-          </p>
+          <div x-data="{show: false}" class="accordion mb-3" id="readMeAccordion">
+            <div class="accordion-item">
+              <h2 id="readMeHeader" class="accordion-header" >
+                <button
+                  class="accordion-button"
+                  :class="{'collapsed': !show}"
+                  type="button"
+                  :aria-expanded="show ? 'true' : 'false'"
+                  aria-controls="collapseOne"
+                  @click="show = !show">
+                  Read Me / How To
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" :class="{'show': show}" aria-labelledby="headingOne">
+                <div class="accordion-body">
 
-          <p>
-            Use a single zero ("0") for unknown cards. However, the last 34
-            cards (bottom row & stock) must be known, and you don't need to
-            enter unknown cards before the first card you know.
-          </p>
+                  <p>
+                    Enter cards representing a Tripeaks game below. Enter each card as 2
+                    characters representing the rank (A, 2, 3, 4, 5, 6, 7, 8, 9, T, J,
+                    Q, K) and suit (C, D, H, S). For example, "TH" is the Ten of Hearts.
+                  </p>
+        
+                  <p>
+                    Use a single zero ("0") for unknown cards. However, the last 34
+                    cards (bottom row & stock) must be known, and you don't need to
+                    enter unknown cards before the first card you know.
+                  </p>
+        
+                  <p>
+                    Entry is case-insensitive, and you can separate cards with any
+                    character (space, comma, etc), or use no separator. Valid examples:
+                  </p>
+        
+                  <ul>
+                    <li>
+                      7S 5D 7C 2D 0 0 3S 2H 3H 9H KC QC TD 8D 9C 7H 9D JS QS 4H 5C 5S 4C
+                      2C QD 8C KD 3D KS JD 2S 7D KH AH 5H 9S 4S QH 6S 6D 3C JC TC 8H 6C
+                      TH AS AD 6H
+                    </li>
+                    <li>
+                      jc, ts, 6d, 7h, qh, 3s, 5h, jh, 6h, 2d, ac, 7s, 7c, 3d, kd, 9s,
+                      3c, th, 6c, ah, 8h, tc, 4s, 8c, ad, 3h, ks, 6s, js, 7d, jd, td,
+                      2c, kh
+                    </li>
+                    <li>
+                      7c03s0qsjc00JSasTSadtcqd9s4s2h9h8sjh6c3dks5s5c6h9C2Cac8C6d5DTH8dkckd9d4c5h8hqh6s
+                    </li>
+                  </ul>
+                  
+                </div>
+              </div>
+            </div>
 
-          <p>
-            Entry is case-insensitive, and you can separate cards with any
-            character (space, comma, etc), or use no separator. Valid examples:
-          </p>
+          </div>
 
-          <ul>
-            <li>
-              7S 5D 7C 2D 0 0 3S 2H 3H 9H KC QC TD 8D 9C 7H 9D JS QS 4H 5C 5S 4C
-              2C QD 8C KD 3D KS JD 2S 7D KH AH 5H 9S 4S QH 6S 6D 3C JC TC 8H 6C
-              TH AS AD 6H
-            </li>
-            <li>
-              jc, ts, 6d, 7h, qh, 3s, 5h, jh, 6h, 2d, ac, 7s, 7c, 3d, kd, 9s,
-              3c, th, 6c, ah, 8h, tc, 4s, 8c, ad, 3h, ks, 6s, js, 7d, jd, td,
-              2c, kh
-            </li>
-            <li>
-              7c03s0qsjc00JSasTSadtcqd9s4s2h9h8sjh6c3dks5s5c6h9C2Cac8C6d5DTH8dkckd9d4c5h8hqh6s
-            </li>
-          </ul>
+          <div class="row">
 
-          <!-- User input of game cards -->
-          <form
-            id="cardsInputForm"
-            x-data="cardsInputForm"
-            @submit.prevent="$dispatch('solve-game')"
-            class="needs-validation"
-            :class="{'was-validated': isFormValid && inputValue.length > 2 }"
-            novalidate
-          >
-            <h3 id="cardsInputLabel" for="cardsInput" class="form-label">
-              Enter Your Cards
-            </h3>
-            <div class="input-group">
-              <input
-                id="cardsInput"
-                aria-describedby="cardsInputLabel"
-                type="text"
-                x-model="inputValue"
-                class="form-control"
-                :class="{ 'is-valid': isFormValid && inputValue.length > 2, 'is-invalid': !isFormValid && inputValue.length > 2 }"
-                maxlength="206"
-                @keyup.debounce="validateCardsInput()"
-                placeholder="e.g., 2S TC 4S QD KH 5S 9S ..."
-                :disabled="$store.global.solvingInProgress"
-              />
-              <button
-                id="cardsInputButton"
-                type="submit"
-                class="btn btn-outline-primary"
-                :disabled="!isFormValid || $store.global.solvingInProgress"
+            <div class="col-12 col-lg-9 col-xl-8">
+              <!-- User input of game cards -->
+              <form
+                id="cardsInputForm"
+                x-data="cardsInputForm"
+                @submit.prevent="$dispatch('solve-game')"
+                class="needs-validation"
+                :class="{'was-validated': isFormValid && inputValue.length > 2 }"
+                novalidate
               >
-                Solve
-              </button>
-            </div>
-            <div class="mb-3">
-              <template x-for="msg in validMessages">
-                <div
-                  class="valid-feedback"
-                  :class="{ 'd-block': validCards.length > 0  }"
-                  x-text="msg"
-                ></div>
-              </template>
-              <template x-for="msg in invalidMessages">
-                <div
-                  class="invalid-feedback"
-                  :class="{ 'd-block': invalidMessages.length > 0 && inputValue.length > 2 }"
-                  x-text="msg"
-                ></div>
-              </template>
-            </div>
-          </form>
+                <h3 id="cardsInputLabel" for="cardsInput" class="form-label">
+                  Enter Your Cards
+                </h3>
+                <div class="input-group">
+                  <input
+                    id="cardsInput"
+                    aria-describedby="cardsInputLabel"
+                    type="text"
+                    x-model="inputValue"
+                    class="form-control"
+                    :class="{ 'is-valid': isFormValid && inputValue.length > 2, 'is-invalid': !isFormValid && inputValue.length > 2 }"
+                    maxlength="206"
+                    @keyup.debounce="validateCardsInput()"
+                    placeholder="e.g., 2S TC 4S QD KH 5S 9S ..."
+                    :disabled="$store.global.solvingInProgress"
+                  />
+                  <button
+                    id="cardsInputButton"
+                    type="submit"
+                    class="btn btn-outline-primary"
+                    :disabled="!isFormValid || $store.global.solvingInProgress"
+                  >
+                    Solve
+                  </button>
+                </div>
+                <div class="mb-3">
+                  <template x-for="msg in validMessages">
+                    <div
+                      class="valid-feedback"
+                      :class="{ 'd-block': validCards.length > 0  }"
+                      x-text="msg"
+                    ></div>
+                  </template>
+                  <template x-for="msg in invalidMessages">
+                    <div
+                      class="invalid-feedback"
+                      :class="{ 'd-block': invalidMessages.length > 0 && inputValue.length > 2 }"
+                      x-text="msg"
+                    ></div>
+                  </template>
+                </div>
+              </form>
 
-          <!-- Friendly display of game cards -->
-          <div
-            id="playingCardsPreview"
-            x-data="playingCardsPreview"
-            class="mb-4"
-          >
-            <div
-              id="gamePyramid"
-              class="game-pyramid-container p-2 p-md-3 p-lg-4"
-            >
-              <!-- first/top row (index 0, row 1) -->
-              <span class="visually-hidden">Game Row 1, Top of Peaks</span>
-              <template x-for="(card, index) in cardsBySlice(0, 3)">
-                <div
-                  x-html="cardSvg(card)"
-                  :class="`game-pyramid-card game-pyramid-card-0-${index}`"
-                ></div>
-              </template>
-
-              <!-- second row (index 1, row 2) -->
-              <span class="visually-hidden">Game Row 2, Second Row</span>
-              <template x-for="(card, index) in cardsBySlice(3, 9)">
-                <div
-                  x-html="cardSvg(card)"
-                  :class="`game-pyramid-card game-pyramid-card-1-${index}`"
-                ></div>
-              </template>
-
-              <!-- third row (index 2, row 3) -->
-              <span class="visually-hidden">Game Row 3, Third Row</span>
-              <template x-for="(card, index) in cardsBySlice(9, 18)">
-                <div
-                  x-html="cardSvg(card)"
-                  :class="`game-pyramid-card game-pyramid-card-2-${index}`"
-                ></div>
-              </template>
-
-              <!-- last/bottom row (index 3, row 4) -->
-              <span class="visually-hidden">Game Row 4, Base of Peaks</span>
-              <template x-for="(card, index) in cardsBySlice(18, 28)">
-                <div
-                  x-html="cardSvg(card)"
-                  :class="`game-pyramid-card game-pyramid-card-3-${index}`"
-                ></div>
-              </template>
-
-              <!-- stock cards -->
-              <span class="visually-hidden">Game Stock, the Draw Cards</span>
-              <template x-for="(card, index) in cardsBySlice(28, 52)">
-                <div
-                  x-html="card === 0 || card === '0' ? cardSvgs['2B'] : cardSvgs[card]"
-                  :class="`game-pyramid-card game-pyramid-card-4-${index}`"
-                ></div>
-              </template>
-            </div>
-          </div>
-
-          <!-- Display of solvingprogress or solution -->
-          <div id="gameSolving" x-data="gameSolving" x-init="onInit()">
-            <div class="d-flex justify-content-start">
+              <!-- Friendly display of game cards -->
               <div
-                class="spinner-border me-2"
-                role="status"
-                x-show="$store.global.solvingInProgress"
-              ></div>
-              <h3 @solve-game.window="startSolver()" x-text="headerText"></h3>
+                id="playingCardsPreview"
+                x-data="playingCardsPreview"
+                class="mb-4"
+              >
+                <div
+                  id="gamePyramid"
+                  class="game-pyramid-container p-2 p-md-3 p-lg-4"
+                >
+                  <!-- first/top row (index 0, row 1) -->
+                  <span class="visually-hidden">Game Row 1, Top of Peaks</span>
+                  <template x-for="(card, index) in cardsBySlice(0, 3)">
+                    <div
+                      x-html="cardSvg(card)"
+                      :class="`game-pyramid-card game-pyramid-card-0-${index}`"
+                    ></div>
+                  </template>
+
+                  <!-- second row (index 1, row 2) -->
+                  <span class="visually-hidden">Game Row 2, Second Row</span>
+                  <template x-for="(card, index) in cardsBySlice(3, 9)">
+                    <div
+                      x-html="cardSvg(card)"
+                      :class="`game-pyramid-card game-pyramid-card-1-${index}`"
+                    ></div>
+                  </template>
+
+                  <!-- third row (index 2, row 3) -->
+                  <span class="visually-hidden">Game Row 3, Third Row</span>
+                  <template x-for="(card, index) in cardsBySlice(9, 18)">
+                    <div
+                      x-html="cardSvg(card)"
+                      :class="`game-pyramid-card game-pyramid-card-2-${index}`"
+                    ></div>
+                  </template>
+
+                  <!-- last/bottom row (index 3, row 4) -->
+                  <span class="visually-hidden">Game Row 4, Base of Peaks</span>
+                  <template x-for="(card, index) in cardsBySlice(18, 28)">
+                    <div
+                      x-html="cardSvg(card)"
+                      :class="`game-pyramid-card game-pyramid-card-3-${index}`"
+                    ></div>
+                  </template>
+
+                  <!-- stock cards -->
+                  <span class="visually-hidden">Game Stock, the Draw Cards</span>
+                  <template x-for="(card, index) in cardsBySlice(28, 52)">
+                    <div
+                      x-html="card === 0 || card === '0' ? cardSvgs['2B'] : cardSvgs[card]"
+                      :class="`game-pyramid-card game-pyramid-card-4-${index}`"
+                    ></div>
+                  </template>
+                </div>
+              </div>
             </div>
 
-            <ul x-show="$store.global.solvingInProgress">
-              <template x-for="msg in statusMessages">
-                <li x-text="msg"></li>
-              </template>
-            </ul>
 
-            <!-- <p x-show="" x-text="statusMessage"></p> -->
+            <div class="col-12 col-lg-3 col-xl-4">
+              <!-- Display of solvingprogress or solution -->
+              <div id="gameSolving" x-data="gameSolving" x-init="onInit()">
+                <div class="d-flex justify-content-start">
+                  <div
+                    class="spinner-border me-2"
+                    role="status"
+                    x-show="$store.global.solvingInProgress"
+                  ></div>
+                  <h3 @solve-game.window="startSolver()" x-text="headerText"></h3>
+                </div>
 
-            <ol x-show="solutionMoves.length > 0">
-              <template x-for="move in solutionMoves">
-                <li x-text="move"></li>
-              </template>
-            </ol>
+                <ul x-show="$store.global.solvingInProgress">
+                  <template x-for="msg in statusMessages">
+                    <li x-text="msg"></li>
+                  </template>
+                </ul>
+
+                <!-- <p x-show="" x-text="statusMessage"></p> -->
+
+                <ol x-show="solutionMoves.length > 0">
+                  <template x-for="move in solutionMoves">
+                    <li x-text="move"></li>
+                  </template>
+                </ol>
+              </div>
+            </div>
+
           </div>
+
         </div>
       </div>
     </div>

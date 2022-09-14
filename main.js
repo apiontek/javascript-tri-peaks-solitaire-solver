@@ -1,5 +1,6 @@
 import "./style.scss";
 //import 'bootstrap';
+import './node_modules/bootstrap/js/src/collapse';
 import Alpine from "alpinejs";
 import cardSvgs from "./cardSvgs";
 import SolverWorker from "./solverWorker?worker";
@@ -225,7 +226,7 @@ const encouragements = [
 Alpine.data("gameSolving", () => ({
   encouragements,
   solverWorker: null,
-  headerText: "",
+  headerText: "Solution will go here:",
   moveCount: 23,
   statusMessages: [],
   solutionMoves: [],

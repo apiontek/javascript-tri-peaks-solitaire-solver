@@ -1,10 +1,8 @@
 # Tripeaks Solitaire Solver 73k
 
-A brute force solver for Microsoft Tripeaks solitaire written in javascript.
+A brute force solver for Microsoft Tripeaks solitaire written in javascript. The solver can provide a "best moves" list (the first set of moves found that removes the most cards from the board) for unsolvable games, and games-in-progress (when you don't already know all the cards).
 
-The `dist` folder contains an HTML+JS interface for entering cards and getting solutions. You can open it directly in a browser to try it out.
-
-The solver can provide a "best moves" list (the first set of moves found that removes the most cards from the board) for unsolvable games, and games-in-progress (when you don't already know all the cards).
+A live demo is available at [tripeaks.73k.us](https://tripeaks.73k.us/) where you can input cards and get solutions. The same files published there are available in this repo's `dist` directory.
 
 This began as a fork of [Courtney Pitcher's project](https://github.com/IgniparousTempest/javascript-tri-peaks-solitaire-solver), and I'm grateful for the solving algorithm & inspiration.
 

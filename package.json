@@ -12,11 +12,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "NODE_ENV=production vite build && html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --case-sensitive -o ./dist/index.html ./dist/index.html",
+    "build": "rm -rf dist && NODE_ENV=production vite build && html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --case-sensitive -o ./dist/index.html ./dist/index.html",
     "preview": "vite preview",
     "test": "mocha",
     "lint": "eslint --ext .js,.html --ignore-path .gitignore --fix .",
-    "format": "prettier .  --write"
+    "format": "prettier . --write"
   },
   "repository": {
     "type": "git",

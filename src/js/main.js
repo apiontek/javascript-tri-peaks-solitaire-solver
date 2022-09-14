@@ -1,4 +1,4 @@
-import "./style.scss";
+import "../scss/style.scss";
 import Alpine from "alpinejs";
 import cardSvgs from "./cardSvgs";
 import SolverWorker from "./solverWorker?worker";

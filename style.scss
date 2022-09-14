@@ -1,5 +1,6 @@
 @use "sass:math";
-@import "../node_modules/bootstrap/scss/bootstrap";
+
+@import "./node_modules/bootstrap/scss/bootstrap";
 
 #gamePyramid {
   display: grid;

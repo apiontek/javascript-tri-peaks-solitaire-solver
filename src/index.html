@@ -141,6 +141,7 @@
                 class="form-control"
                 :class="{ 'is-valid': isFormValid && inputValue.length > 2, 'is-invalid': !isFormValid && inputValue.length > 2 }"
                 maxlength="206"
+                @paste.debounce="validateCardsInput()"
                 @keyup.debounce="validateCardsInput()"
                 placeholder="e.g., 2S TC 4S QD KH 5S 9S ..."
                 :disabled="$store.global.solvingInProgress"
@@ -148,7 +149,7 @@
               <button
                 id="cardsInputButton"
                 type="submit"
-                class="btn btn-outline-primary"
+                class="btn btn-primary"
                 :disabled="!isFormValid || $store.global.solvingInProgress"
               >
                 Solve
@@ -187,7 +188,7 @@
               <template x-for="(card, index) in cardsBySlice(0, 3)">
                 <div
                   x-html="cardSvg(card)"
-                  :class="`game-pyramid-card game-pyramid-card-0-${index}`"
+                  :class="`game-pyramid-card shadow-sm game-pyramid-card-0-${index}`"
                 ></div>
               </template>
 
@@ -196,7 +197,7 @@
               <template x-for="(card, index) in cardsBySlice(3, 9)">
                 <div
                   x-html="cardSvg(card)"
-                  :class="`game-pyramid-card game-pyramid-card-1-${index}`"
+                  :class="`game-pyramid-card shadow-sm game-pyramid-card-1-${index}`"
                 ></div>
               </template>
 
@@ -205,7 +206,7 @@
               <template x-for="(card, index) in cardsBySlice(9, 18)">
                 <div
                   x-html="cardSvg(card)"
-                  :class="`game-pyramid-card game-pyramid-card-2-${index}`"
+                  :class="`game-pyramid-card shadow-sm game-pyramid-card-2-${index}`"
                 ></div>
               </template>
 
@@ -214,7 +215,7 @@
               <template x-for="(card, index) in cardsBySlice(18, 28)">
                 <div
                   x-html="cardSvg(card)"
-                  :class="`game-pyramid-card game-pyramid-card-3-${index}`"
+                  :class="`game-pyramid-card shadow-sm game-pyramid-card-3-${index}`"
                 ></div>
               </template>
 
@@ -223,7 +224,7 @@
               <template x-for="(card, index) in cardsBySlice(28, 52)">
                 <div
                   x-html="card === 0 || card === '0' ? cardSvgs['2B'] : cardSvgs[card]"
-                  :class="`game-pyramid-card game-pyramid-card-4-${index}`"
+                  :class="`game-pyramid-card shadow-sm game-pyramid-card-4-${index}`"
                 ></div>
               </template>
             </div>

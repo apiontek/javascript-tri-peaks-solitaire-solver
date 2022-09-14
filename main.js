@@ -1,6 +1,8 @@
 import "./style.scss";
+//import 'bootstrap';
 import Alpine from "alpinejs";
 import cardSvgs from "./cardSvgs";
+import SolverWorker from "./solverWorker?worker";
 
 // Some helpful constants
 const suits = {
@@ -61,9 +63,10 @@ Object.keys(cardSvgs).forEach((ckey) => {
 Alpine.store("global", {
   deck,
   cardsToSolve: Array(deck.length).fill(0),
+  solvingInProgress: false,
 });
 
-// card preview component data
+// card preview component logic
 Alpine.data("playingCardsPreview", () => ({
   cardSvgs,
   cardsBySlice(start, length) {
@@ -74,7 +77,7 @@ Alpine.data("playingCardsPreview", () => ({
   },
 }));
 
-// input component data
+// input component logic
 Alpine.data("cardsInputForm", () => ({
   // "constants" for validation etc
   nonAlphaNumRegEx: /[\W_]+/g,
@@ -181,6 +184,103 @@ Alpine.data("cardsInputForm", () => ({
       .fill(0)
       .concat(this.validCards)
       .map((c) => (c === "0" ? 0 : c));
+  },
+}));
+
+// long-running solve messages
+const encouragements = [
+  "Hang in there!",
+  "Let go like a bird flies, not fighting the wind but gliding on it",
+  "Stay patient and trust the journey.",
+  "Everything is coming together…",
+  "Solitaire is a journey, not a destination.",
+  "For things to reveal themselves to us, we need to be ready to abandon our views about them.",
+  "Patience is bitter, but its fruit is sweet.",
+  "Strive for progress, not perfection.",
+  "I wish only to be alive and to experience this living to the fullest.",
+  "This too shall pass.",
+  "Patience is the companion of wisdom.",
+  "The mountains are calling and I must go.",
+  "Give time time.",
+  "If you find a path with no obstacles, it probably doesn't lead anywhere",
+  "A smooth sea never made a good sailor.",
+  "Stick with the winners.",
+  "I immerse myself in the experience of living without having to evaluate or understand it.",
+  "Why fit in when you were born to stand out?",
+  "Don't let yesterday take up too much of today.",
+  "The least I owe the mountains is a body.",
+  "Getting so close!",
+  "Many people think excitement is happiness. But when you are excited you are not peaceful.",
+  "Misery is optional.",
+  "Mistakes are proof that you're trying.",
+  "Life would be so much easier if we only had the source code.",
+  "A computer once beat me at chess, but it was no match for me at kickboxing.",
+  "Patience is not simply the ability to wait, it's how we behave while we're waiting.",
+  "We must let go of the life we have planned so as to accept the one that is waiting for us.",
+  "Somewhere, something incredible is waiting to be known.",
+  "If you spend your whole life waiting for the storm, you'll never enjoy the sunshine.",
+];
+
+// game solving component logic
+Alpine.data("gameSolving", () => ({
+  encouragements,
+  solverWorker: null,
+  headerText: "",
+  moveCount: 23,
+  statusMessages: [],
+  solutionMoves: [],
+  nodesTried: 0,
+  nodesTriedFloor: 0,
+  reset() {
+    this.$store.global.solvingInProgress = false;
+    this.moveCount = 0;
+    this.statusMessages = [];
+    this.nodesTried = 0;
+    this.nodesTriedFloor = 0;
+  },
+  onInit() {
+    this.solverWorker = new SolverWorker();
+    this.solverWorker.addEventListener("message", async (e) => {
+      if (e.data.msg === "solve-progress") {
+        this.nodesTried++;
+        this.moveCount = e.data.moveCount;
+        this.statusMessages[0] = `Most moves found so far: ${this.moveCount}`;
+
+        let newFloor = Math.floor(this.nodesTried / 10000) * 10000;
+        if (newFloor > this.nodesTriedFloor) {
+          this.nodesTriedFloor = newFloor;
+          if (this.nodesTriedFloor > 50000) {
+            this.statusMessages[1] = `Over ${this.nodesTriedFloor.toLocaleString(
+              "en"
+            )} possibilities tried. Still working…`;
+          }
+          if (this.nodesTriedFloor % 250000 === 0) {
+            let randInRange = Math.floor(
+              Math.random() * this.encouragements.length
+            );
+            this.statusMessages.push(this.encouragements[randInRange]);
+          }
+        }
+      } else if (e.data.msg === "solve-result") {
+        if (e.data.result[0]) {
+          this.headerText = "Solution found:";
+          this.solutionMoves = e.data.result[1];
+          this.reset();
+        } else {
+          this.headerText = "Could not solve. Best moves found:";
+          this.solutionMoves = e.data.result[2];
+          this.reset();
+        }
+      }
+    });
+  },
+  async startSolver() {
+    this.headerText = "Solving…";
+    this.solutionMoves = [];
+    this.$store.global.solvingInProgress = true;
+    await this.$nextTick();
+    let game = JSON.parse(JSON.stringify(this.$store.global.cardsToSolve));
+    this.solverWorker.postMessage({ msg: "try-to-solve", game: game });
   },
 }));
 

@@ -1,6 +1,5 @@
-const assert = require("assert");
-const solver = require("./solver");
-const Card = solver.Card;
+import { Card, solve } from "./solver.js";
+import assert from "assert";
 
 /*
  * Tests for classes
@@ -56,17 +55,17 @@ const partial_games = [
 ];
 
 it("solve should solve known games", () => {
-  solvable_games.forEach((i) => {
+  solvable_games.forEach(async (i) => {
     const array = i.split(" ");
-    const result = solver.solve(array.slice(0, 28), array.slice(28, 52), 0, []);
+    const result = await solve(array.slice(0, 28), array.slice(28, 52));
     assert.equal(result[0], true);
   });
 }).timeout(200000);
 
 it("solve should solve partial games", () => {
-  partial_games.forEach((i) => {
+  partial_games.forEach(async (i) => {
     const array = i.split(" ").map((x) => (x === "0" ? 0 : x));
-    const result = solver.solve(array.slice(0, 28), array.slice(28, 52), 0, []);
+    const result = await solve(array.slice(0, 28), array.slice(28, 52));
     assert.equal(result[0], true);
   });
 });

@@ -50,26 +50,37 @@
           <form
             id="cardsInputForm"
             x-data="cardsInputForm"
-            @submit.prevent="submit"
+            @submit.prevent="$dispatch('solve-game')"
             class="needs-validation"
             :class="{'was-validated': isFormValid && inputValue.length > 2 }"
             novalidate
           >
-            <div class="mb-3">
-              <label id="cardsInputLabel" for="cardsInput" class="form-label"
-                >Enter Your Cards</label
-              >
+            <h3 id="cardsInputLabel" for="cardsInput" class="form-label">
+              Enter Your Cards
+            </h3>
+            <div class="input-group">
               <input
                 id="cardsInput"
                 aria-describedby="cardsInputLabel"
+                type="text"
                 x-model="inputValue"
                 class="form-control"
                 :class="{ 'is-valid': isFormValid && inputValue.length > 2, 'is-invalid': !isFormValid && inputValue.length > 2 }"
                 maxlength="206"
                 @keyup.debounce="validateCardsInput()"
                 placeholder="e.g., 2S TC 4S QD KH 5S 9S ..."
+                :disabled="$store.global.solvingInProgress"
               />
-
+              <button
+                id="cardsInputButton"
+                type="submit"
+                class="btn btn-outline-primary"
+                :disabled="!isFormValid || $store.global.solvingInProgress"
+              >
+                Solve
+              </button>
+            </div>
+            <div class="mb-3">
               <template x-for="msg in validMessages">
                 <div
                   class="valid-feedback"
@@ -88,7 +99,11 @@
           </form>
 
           <!-- Friendly display of game cards -->
-          <div id="playingCardsPreview" x-data="playingCardsPreview">
+          <div
+            id="playingCardsPreview"
+            x-data="playingCardsPreview"
+            class="mb-4"
+          >
             <div
               id="gamePyramid"
               class="game-pyramid-container p-2 p-md-3 p-lg-4"
@@ -138,6 +153,32 @@
                 ></div>
               </template>
             </div>
+          </div>
+
+          <!-- Display of solvingprogress or solution -->
+          <div id="gameSolving" x-data="gameSolving" x-init="onInit()">
+            <div class="d-flex justify-content-start">
+              <div
+                class="spinner-border me-2"
+                role="status"
+                x-show="$store.global.solvingInProgress"
+              ></div>
+              <h3 @solve-game.window="startSolver()" x-text="headerText"></h3>
+            </div>
+
+            <ul x-show="$store.global.solvingInProgress">
+              <template x-for="msg in statusMessages">
+                <li x-text="msg"></li>
+              </template>
+            </ul>
+
+            <!-- <p x-show="" x-text="statusMessage"></p> -->
+
+            <ol x-show="solutionMoves.length > 0">
+              <template x-for="move in solutionMoves">
+                <li x-text="move"></li>
+              </template>
+            </ol>
           </div>
         </div>
       </div>

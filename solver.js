@@ -103,11 +103,12 @@ function getBestMoveArray(bestMoveArray, newMoveArray) {
  * @param stockArray The cards in the stock.
  * @param stockIndex The index of the top stock card.
  * @param moveArray The list of moves that have been made to get a deck in this configuration.
- * @returns {*[]|([*, *, *]|[*, *, *]|[*, *, *])}
+ * @returns {Promise<{*[]|([*, *, *]|[*, *, *]|[*, *, *])}>}
  */
-function solve(
+async function solve(
   pyramidArray,
   stockArray,
+  worker = null,
   stockIndex = 0,
   moveArray = [],
   bestMoveArray = []
@@ -121,6 +122,12 @@ function solve(
   // If yes, replace the known best move array
   newBestMoveArray = getBestMoveArray(newBestMoveArray, newMoveArray);
   newBestMoveArray = JSON.parse(JSON.stringify(newBestMoveArray));
+  if (worker) {
+    worker.postMessage({
+      msg: "solve-progress",
+      moveCount: newBestMoveArray.length,
+    });
+  }
 
   // We cleared the pyramid
   if (pyramid.isCleared) {
@@ -150,9 +157,10 @@ function solve(
     let newPyramidArray = JSON.parse(JSON.stringify(pyramidArray));
     newPyramidArray[freeCardsIndices[i]] = 0;
 
-    let result = solve(
+    let result = await solve(
       newPyramidArray,
       newStock,
+      worker,
       stockIndex,
       newMoveArray,
       newBestMoveArray
@@ -167,9 +175,10 @@ function solve(
   // Flip over a new card
   newMoveArray = JSON.parse(JSON.stringify(moveArray));
   newMoveArray.push(MoveString.flipStock());
-  let result = solve(
+  let result = await solve(
     pyramidArray,
     stockArray,
+    worker,
     ++stockIndex,
     newMoveArray,
     newBestMoveArray
@@ -184,4 +193,4 @@ function solve(
   return [GameStates.lost, moveArray, newBestMoveArray];
 }
 
-module.exports = { Card, solve };
+export { Card, solve };

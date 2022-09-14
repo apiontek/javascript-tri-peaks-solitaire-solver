@@ -1,0 +1,13 @@
+{
+  "extends": ["eslint:recommended", "prettier"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "plugins": ["html"],
+  "env": {
+    "browser": true,
+    "es2022": true,
+    "mocha": true,
+    "node": true
+  }
+}

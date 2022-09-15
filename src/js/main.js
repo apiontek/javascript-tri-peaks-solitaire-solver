@@ -2,11 +2,7 @@ import "../scss/style.scss";
 import Alpine from "alpinejs";
 import cardSvgs from "./cardSvgs";
 import SolverWorker from "./solverWorker?worker";
-
-// navbar svg icons
-import svg73k from "../img/73k.svg?raw";
-import biTwitter from "../img/bi-twitter.svg?raw";
-import biGithub from "../img/bi-github.svg?raw";
+import navbar from "./navbar";
 
 // Some helpful constants
 const suits = {
@@ -71,11 +67,7 @@ Alpine.store("global", {
 });
 
 // navbar logic
-Alpine.data("navbar", () => ({
-  svg73k: svg73k.replaceAll('="16"', '="24"'),
-  biTwitter: biTwitter.replaceAll('="16"', '="24"'),
-  biGithub: biGithub.replaceAll('="16"', '="24"'),
-}));
+Alpine.data("navbar", () => navbar);
 
 // card preview component logic
 Alpine.data("playingCardsPreview", () => ({

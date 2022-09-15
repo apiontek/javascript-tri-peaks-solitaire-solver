@@ -127,7 +127,7 @@ async function solve(
   if (worker) {
     worker.postMessage({
       msg: "solve-progress",
-      moveCount: newBestMoveArray.length,
+      moveCount: newBestMoveArray.filter((s) => s.startsWith("Move")).length,
     });
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "tripeaks-solitaire-solver-js-73k",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A brute force solver for tri peaks solitaire written in javascript. Forked from work by Courtney Pitcher at https://github.com/IgniparousTempest/javascript-tri-peaks-solitaire-solver",
   "keywords": [
     "tripeaks",

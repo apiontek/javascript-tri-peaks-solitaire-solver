@@ -266,7 +266,7 @@ Alpine.data("gameSolving", () => ({
       if (e.data.msg === "solve-progress") {
         this.nodesTried++;
         this.moveCount = e.data.moveCount;
-        this.statusMessages[0] = `Most moves found so far: ${this.moveCount}`;
+        this.statusMessages[0] = `${this.moveCount} card-clearing moves found so far.`;
 
         let newFloor = Math.floor(this.nodesTried / 10000) * 10000;
         if (newFloor > this.nodesTriedFloor) {

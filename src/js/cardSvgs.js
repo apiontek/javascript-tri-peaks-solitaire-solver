@@ -1,3 +1,5 @@
+import { suits, ranks, deck } from "./deck";
+
 // backs & joker
 import card1B from "../cards/1B.svg?raw";
 import card2B from "../cards/2B.svg?raw";
@@ -124,5 +126,32 @@ let cardSvgs = {
   QS: cardQS,
   KS: cardKS,
 };
+
+// Do some SVG processing
+const cardSvgTitle = (ckey) => {
+  return deck.includes(ckey)
+    ? `${ranks[ckey[0]]} of ${suits[ckey[1]]}`
+    : "Unknown Card";
+};
+Object.keys(cardSvgs).forEach((ckey) => {
+  var cardDoc = new DOMParser().parseFromString(
+    cardSvgs[ckey],
+    "image/svg+xml"
+  );
+  var svgRoot = cardDoc.documentElement;
+  svgRoot.removeAttribute("height");
+  svgRoot.removeAttribute("width");
+  svgRoot.removeAttribute("class");
+  var titleEl = cardDoc.createElementNS(
+    svgRoot.lookupNamespaceURI(null),
+    "title"
+  );
+  var titleText = document.createTextNode(cardSvgTitle(ckey));
+  titleEl.appendChild(titleText);
+  svgRoot.insertBefore(titleEl, svgRoot.firstElementChild);
+  cardSvgs[ckey] = new XMLSerializer().serializeToString(
+    cardDoc.documentElement
+  );
+});
 
 export default cardSvgs;

@@ -34,15 +34,15 @@
   },
   "homepage": "https://github.com/apiontek/tripeaks-solitaire-solver-js-73k#readme",
   "devDependencies": {
-    "alpinejs": "^3.10.3",
-    "bootstrap": "^5.2.1",
-    "eslint": "^8.23.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-html": "^7.1.0",
-    "html-minifier": "^4.0.0",
-    "mocha": "^10.0.0",
-    "prettier": "^2.7.1",
-    "sass": "^1.54.9",
-    "vite": "^3.1.0"
+    "alpinejs": "^3.12.x",
+    "bootstrap": "^5.2.x",
+    "eslint": "^8.38.x",
+    "eslint-config-prettier": "^8.8.x",
+    "eslint-plugin-html": "^7.1.x",
+    "html-minifier": "^4.0.x",
+    "mocha": "^10.2.x",
+    "prettier": "^2.8.x",
+    "sass": "^1.62.x",
+    "vite": "^3.2.x"
   }
 }
